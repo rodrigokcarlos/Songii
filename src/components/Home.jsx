@@ -17,18 +17,33 @@ export default function Home(){
     const [favorite, setFav] = useState(false);
     const [param, setParam] = useState([]);
 
+
+    //fav
     const checkIfIsFavorite = () => (favorite ? "fas fa-heart" : "far fa-heart");
     const handleToggleFavorite = (param) => setFav((previous) => !previous);
 
     const playListBase = '/playlist/1111141961';
     const buscarMusica = '/search';
-    
-    function mudaMusica(dale) {
-        
-        console.log('alo')
-        // const musicaNova = `https://open.spotify.com/embed/track/${dale.children[0].dataset.id}?utm_source=generator&theme=0`
-        // playerframe.setAttribute('src', musicaNova)
-        console.log(param);
+
+    function pesquisar() {
+        const options = {
+            method: 'GET',
+            url: buscarMusica,
+            params: {q: param},
+            headers: {
+                'X-RapidAPI-Key': '9815fa8f84msh2b22f10503aa3a4p1a9e95jsn3697d76ee3a1',
+                'X-RapidAPI-Host': 'deezerdevs-deezer.p.rapidapi.com'
+            }
+            };         
+            axFetch.request(options).then(function (saida) {
+                const data = saida.data.data;  // search
+                setMusica(data);
+                console.log(data);
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+            
     };
 
     const puxarDados = () => {
@@ -36,9 +51,6 @@ export default function Home(){
         const options = {
         method: 'GET',
         url: playListBase,
-        // url: 'https://deezerdevs-deezer.p.rapidapi.com/track/1825993627',
-        // url: 'https://deezerdevs-deezer.p.rapidapi.com/search',
-        params: {q: Busca.value},
         headers: {
             'X-RapidAPI-Key': '9815fa8f84msh2b22f10503aa3a4p1a9e95jsn3697d76ee3a1',
             'X-RapidAPI-Host': 'deezerdevs-deezer.p.rapidapi.com'
@@ -46,23 +58,29 @@ export default function Home(){
         };         
         axFetch.request(options).then(function (saida) {
             const data = saida.data.tracks.data;
-            //const data = saida.data.data;  // search
             setMusica(data);
+            console.log(( data[0].duration / 60 ) % 6);
         })
         .catch(function (error) {
             console.error(error);
         });
 
     }
+    const apertaButao = (e) => {
+        if (e.key === 'Enter') {
+            pesquisar();
+        }
+      };
     useEffect(() =>{
         puxarDados();
+        
     }, []);
     
     return (
         <div className='corpo'>
             <Header/>
             <Container>
-                <Busca type="text" placeholder='Buscar' onChange={(e) =>setParam(e.target.value)}/>
+                <Busca type="text" placeholder='Buscar' onChange={(e) =>setParam(e.target.value)} onKeyDown={apertaButao} />
                 <div><Link to="/favoritos">Favoritos</Link></div>
                 <CorpoMeio>
                     <ListaDeMusicas> 
@@ -70,25 +88,25 @@ export default function Home(){
                         <div></div>
                         <div>Artista</div>
                         <div></div>
-                        <div></div>
                         <div><AccessTimeIcon/></div>
                         <div><FavoriteIcon/></div>
+                        <div></div>
                         
                     </ListaDeMusicas>
                     {(
                     listaMusica.map((musica) => (
-                        <ListaDeMusicas key={musica.id} onClick={mudaMusica(this)}>
+                        <ListaDeMusicas key={musica.id}>
                             <div><CapaAlbum src={musica.album.cover} alt='capaDoAlbum' className="capa"/></div>
                             <div className="titulo">{musica.title}</div>
                             <div className="artista">{musica.artist.name}</div>
                             <div className='previaMusica'><video controls><source src={musica.preview}/></video></div>
-                            <div className="linkMusica"><a href={musica.link} target='_blank'>Ouça no Deezer <OpenInNewIcon/></a></div>
-                            <div className="duracao">{musica.duration}</div>
+                            <div className="duracao">{('00'+ parseInt(musica.duration / 60) ).slice(-2) + ':' + ('00' + musica.duration % 60).slice(-2)}</div>
                             <div>     
                                 <p onClick={handleToggleFavorite}>
                                 <i className={checkIfIsFavorite} id="item">{favorite ? (<FavoriteBorderIcon/>) : <FavoriteIcon/>}</i>
                                 </p>
                             </div>
+                            <div className="linkMusica"><a href={musica.link} target='_blank'>Ouça no Deezer <OpenInNewIcon/></a></div>
                         </ListaDeMusicas>
                     )
                     )
@@ -104,7 +122,9 @@ const ListaDeMusicas = styled.div`
     display: flex;
     align-items: center;
     transition: 0.2s ease;
-    :hover{
+    border-top: 2px solid #f1f3f4;
+    border-bottom: 2px solid #f1f3f4;
+    :hover:not(:first-child){
         border-top: 2px solid #999;
         border-bottom: 2px solid #999;
     }
@@ -123,7 +143,7 @@ const ListaDeMusicas = styled.div`
         transition: 0.2s ease;
     }
     a:hover{
-        color: white;
+        color: #999;
     }
     video{
         width: 180px;
