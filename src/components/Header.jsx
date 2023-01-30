@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import '../App.css';
 import logo from '../assets/logo-Songii.png';
-import styled from 'styled-components';
-import { NoEncryption } from "@mui/icons-material";
 
 const linkStyle = {
     textDecoration: 'none'
