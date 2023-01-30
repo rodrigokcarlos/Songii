@@ -6,6 +6,7 @@ export default function Header() {
     return (
         <div className="header">
             <Link to="/"><img src={logo} alt="logoSongii" className="logo" /></Link>
+            <div>a</div>
         </div>
     )
     
