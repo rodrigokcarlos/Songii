@@ -35,7 +35,7 @@ export const ListaDeMusicas = styled.div`
         height: 30px;
     }
 `
-export const TituloDeMusicas = styled.div`
+export const TituloDeMusica = styled.div`
     height:70px;
     display: flex;
     align-items: center;
