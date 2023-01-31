@@ -54,7 +54,7 @@ export default function Home() {
       .then(function (saida) {
         const data = saida.data.data;
         if(data === undefined) {
-            return
+            return puxarDados();
           }
           setMusica(data);
         }

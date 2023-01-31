@@ -16,6 +16,7 @@
     height: 60px;
     display: flex;
     justify-content: space-between;
+    padding: 0 20px;
     align-items: center;
 }
 .logo{
@@ -26,6 +27,7 @@
     font-weight: 400;
     text-decoration: none;
     color: black;
+    margin-right: 50px;
 
 }
 .fav:hover {
