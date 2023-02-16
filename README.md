@@ -8,6 +8,6 @@ Para acessar o projeto basta seguir essas simples intruções!
 
 ### Instalação e execução
  
- npm i
+ ``npm i``
 
- npm run dev
+``m run dev``
