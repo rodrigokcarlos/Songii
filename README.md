@@ -10,4 +10,4 @@ Para acessar o projeto basta seguir essas simples intruções!
  
  ``npm i``
 
-``m run dev``
+``npm run dev``
